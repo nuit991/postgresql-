@@ -1,3 +1,12 @@
 postgresql 安裝
 建立一個Table-studnet
-->前往，Database->schemas->Tables 確認
+->前往，Database->自己建的DB->schemas->Tables 確認
+
+增加數據庫資料，Database->自己建的DB，右鍵選擇Query Tool，程式碼輸入過就可以清掉再輸入新的
+
+插入資料
+INSERT INTO students (name, age, grade) VALUES ('Alice', 22, 'A');
+INSERT INTO students (name, age, grade) VALUES ('Bob', 25, 'B');
+
+確認插入的資料
+SELECT * FROM students;
