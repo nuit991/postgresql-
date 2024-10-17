@@ -13,3 +13,15 @@ SELECT * FROM students;
 
 只顯示大於23歲的學生
 SELECT * FROM students WHERE age > 23;
+
+更新數據
+UPDATE students SET grade = 'A+' WHERE name = 'Alice';
+
+刪除數據
+DELETE FROM students WHERE age < 23;
+
+計算學生總數
+SELECT COUNT(*) FROM students;  -- 计算学生总数
+
+計算平均年齡
+SELECT AVG(age) FROM students;   -- 计算平均年龄
