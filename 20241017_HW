@@ -10,3 +10,6 @@ INSERT INTO students (name, age, grade) VALUES ('Bob', 25, 'B');
 
 確認插入的資料
 SELECT * FROM students;
+
+只顯示大於23歲的學生
+SELECT * FROM students WHERE age > 23;
