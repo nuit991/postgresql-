@@ -1,0 +1,40 @@
+這邊使用python 寫一個亂數產生的腳本
+
+1.要先安裝 pip install Faker psycopg2
+2.到VSC新增一個.py檔案
+
+import psycopg2
+from faker import Faker
+import random
+
+# 创建 Faker 实例
+fake = Faker()
+
+# 连接到 PostgreSQL 数据库
+conn = psycopg2.connect(
+    dbname = 'Test_1',  # 替换为你的数据库名称
+    user = 'postgres',         # PostgreSQL 用户名
+    password = 'admin',      # PostgreSQL 密码
+    host = 'localhost',        # 数据库主机
+    port = '5432'              # PostgreSQL 端口（默认是 5432）
+)
+cursor = conn.cursor()
+
+# 准备插入 100 笔随机数据
+insert_query = "INSERT INTO students (name, age, grade) VALUES (%s, %s, %s)"
+
+# 生成并插入数据
+for _ in range(100):
+    name = fake.name()  # 随机生成名字
+    age = random.randint(18, 30)  # 随机年龄范围在 18 到 30 之间
+    grade = random.choice(['A', 'B', 'C', 'D', 'E', 'F'])  # 随机选择一个成绩
+    cursor.execute(insert_query, (name, age, grade))
+
+# 提交事务
+conn.commit()
+
+# 关闭连接
+cursor.close()
+conn.close()
+
+print("成功插入 100 笔随机数据！")
