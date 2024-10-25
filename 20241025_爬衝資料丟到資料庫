@@ -1,0 +1,99 @@
+###資料庫部分
+1.新增一個資料庫
+1-1.打開程式，對Database右鍵->Create->輸入名子
+1-2.對DB右鍵->Query Tool->Query視窗，程式輸入
+
+前往，Database->自己建的DB->schemas->Tables 確認
+
+2.
+新增Table(放資料的地方)
+
+CREATE TABLE #名子 (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    url VARCHAR(255),
+    img_url VARCHAR(255)
+);
+
+#解釋
+id SERIAL PRIMARY KEY：SERIAL 是一种特殊的数据类型，用于自动生成唯一的整数，适合作为主键。
+name VARCHAR(255) NOT NULL：name 列为可变长度字符串，最大长度为 255，且不能为空。
+price DECIMAL(10, 2) NOT NULL：price 列为十进制数，最多 10 位数，其中 2 位为小数，且不能为空。
+url 和 img_url 列：这两列为可变长度字符串，没有限制长度。
+
+如果要更改資料輸入類型
+ALTER TABLE #你的Table ALTER COLUMN #列的名稱 TYPE #你要改的類型;
+
+
+
+###Python 部分
+
+爬蟲沒啥好說
+
+
+資料庫部分
+import psycopg2
+from psycopg2 import sql
+from PC_scarper import search_pchome_product  # 確保這個檔案的名稱是 scraper.py
+
+# 資料庫連線參數
+DB_NAME = 'Pchome_Scarper'
+DB_USER = 'postgres'
+DB_PASSWORD = 'admin'
+DB_HOST = "localhost"
+DB_PORT = "5432"
+
+# 資料庫連線
+def connect_db():
+    return psycopg2.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+
+# 插入產品資料
+def insert_data(pc_goods):
+    #建立資料庫連結
+    conn = connect_db()
+    #建立游標對象
+    cursor = conn.cursor()
+    
+    # SQL 插入語句
+    # INSERT INTO 是 SQL 的一部分，表示要向某个表中插入数据。
+    # pc_goods 是目标表的名称。
+    # prd_name, price, product_url, img_tag 这是要插入的列名，這邊要跟SQL裡面新增的列名稱一模一樣
+    insert_query = sql.SQL("INSERT INTO pc_goods (prd_name, price, product_url, img_tag) VALUES (%s, %s, %s, %s)")
+
+    for product in pc_goods:
+        # 执行 SQL 插入语句：cursor.execute() 方法用于执行 SQL 查询。在这里，它会执行之前准备好的 insert_query。
+        # 插入数据：第二个参数 product 是要插入的数据。由于 product 是一个元组（例如 ('Product Name', 1999.99, 'http://example.com/product', 'http://example.com/image.jpg')）
+        # 因此 cursor.execute() 会将 product 中的值依次替换到 insert_query 中的 %s 占位符。
+        cursor.execute(insert_query, product)  # product 是一個元組 (name, price, url, img_url)
+    #提交事务并关闭连接
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+# 主要執行程式
+def main():
+    product_name = '冷氣'  # 你要搜尋的產品名稱
+    max_pages = 1  # 你想要抓取的頁數
+    results, total_items = search_pchome_product(product_name, max_pages)
+
+    if results:
+        print(f"抓取到 {total_items} 項產品，準備插入資料庫...")
+        insert_data(results)
+        print("資料已成功插入資料庫！")
+    else:
+        print("未抓取到任何產品資料。")
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
