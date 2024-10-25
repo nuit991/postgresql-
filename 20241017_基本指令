@@ -34,4 +34,5 @@ SELECT column_name, data_type
 FROM information_schema.columns
 WHERE table_name = 'pc_goods';
 
-
+更改列的輸入Type
+ALTER TABLE pc_goods ALTER COLUMN column_name TYPE TEXT;
