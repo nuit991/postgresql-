@@ -36,3 +36,6 @@ WHERE table_name = 'pc_goods';
 
 更改列的輸入Type
 ALTER TABLE pc_goods ALTER COLUMN column_name TYPE TEXT;
+
+確認寫入資料庫的結果
+SELECT * FROM pc_goods;
