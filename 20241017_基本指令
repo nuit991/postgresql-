@@ -26,3 +26,12 @@ SELECT COUNT(*) FROM students;  -- 计算学生总数
 計算平均年齡
 SELECT AVG(age) FROM students;   -- 计算平均年龄
 
+更改列的名稱
+ALTER TABLE #表的名子 RENAME COLUMN #原本的名子 TO #要更改的名子;
+
+確認表的內容
+SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_name = 'pc_goods';
+
+
