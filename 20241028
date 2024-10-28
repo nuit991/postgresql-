@@ -1,0 +1,13 @@
+確認對於新資料是否自動增加欄位
+SERIAL 是 PostgreSQL 中一種自動增量的整數類型。當你插入新的產品資料時，product_id 會自動生成，確保每一筆資料都有唯一的識別碼。
+
+下指令
+SELECT column_name, data_type, column_default 
+FROM information_schema.columns 
+WHERE table_name = 'pc_goods';
+
+確認是否出現
+column_name	  data_type	  column_default
+product_id	  integer	    nextval('pc_goods_product_id_seq'::regclass) <----這個
+
+有的話就是有
